@@ -33,11 +33,21 @@ public class ProdutoRouter extends BaseRouterBuilder {
                 .type(Produto.class)
                 .to("direct:listar-produtos");
         from("direct:listar-produtos").process(processorProduto);
+
+        rest("/produto/produto?bridgeEndpoint=true/")
+                .post()
+                .description("Serviço de inclusão de novo Produto")
+                .produces(MediaType.APPLICATION_JSON_VALUE)
+                .consumes(MediaType.APPLICATION_JSON_VALUE)
+                .bindingMode(RestBindingMode.auto)
+                .type(Produto.class)
+                .to("direct:incluir-produto");
+        from("direct:incluir-produto").process(processorProdutoNovo);
     }
 
 
     /**
-     * Busca o usuário na base interna.
+     * Busca o todos os produtos.
      */
     Processor processorProduto = new Processor() {
         @Override
@@ -45,6 +55,24 @@ public class ProdutoRouter extends BaseRouterBuilder {
             Optional<Iterable<Produto>> optional = Optional.ofNullable(produtoService.findAll());
 
             if (optional.isPresent()) {
+                setBody(exchange, new GenericRetornoDTO<>(optional.get(), HttpStatus.OK.value()));
+            } else {
+                setBody(exchange, new GenericRetornoDTO<>(HttpStatus.NOT_FOUND.value()));
+            }
+        }
+    };
+
+    /**
+     * Busca o todos os produtos.
+     */
+    Processor processorProdutoNovo = new Processor() {
+        @Override
+        public void process(Exchange exchange) throws Exception {
+
+            Optional<Produto> optional = Optional.ofNullable(exchange.getIn().getHeader("cpf", Produto.class));
+
+            if (optional.isPresent()) {
+                produtoService.inserirProduto(optional.get());
                 setBody(exchange, new GenericRetornoDTO<>(optional.get(), HttpStatus.OK.value()));
             } else {
                 setBody(exchange, new GenericRetornoDTO<>(HttpStatus.NOT_FOUND.value()));

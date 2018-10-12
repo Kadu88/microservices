@@ -25,5 +25,9 @@ public class ProdutoService implements Serializable {
         return produtoDao.findAll();
     }
 
+    public void inserirProduto(Produto produto) {
+        produtoDao.incluirProduto(produto);
+    }
+
 }
 

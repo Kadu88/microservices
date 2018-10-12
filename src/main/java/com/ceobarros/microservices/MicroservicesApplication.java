@@ -26,19 +26,19 @@ public class MicroservicesApplication {
 	public DataSource dataSource() {
 		DriverManagerDataSource dataSource = new DriverManagerDataSource();
 		dataSource.setDriverClassName("com.mysql.jdbc.Driver");
-		dataSource.setUrl("jdbc:mysql://localhost:3306/pet_data_produto");
+		dataSource.setUrl("jdbc:mysql://192.168.0.10:3306/pet_data_produto");
 		dataSource.setUsername("rootapp");
 		dataSource.setPassword("Vi0i57qr");
 
-//		// schema init
-//		Resource initSchema = new ClassPathResource("scripts/schema.sql");
-//		DatabasePopulator databaseCreator = new ResourceDatabasePopulator(initSchema);
-//		DatabasePopulatorUtils.execute(databaseCreator, dataSource);
-//
-//		// schema init
-//		Resource initData = new ClassPathResource("scripts/database_00.sql");
-//		DatabasePopulator databasePopulator = new ResourceDatabasePopulator(initData);
-//		DatabasePopulatorUtils.execute(databasePopulator, dataSource);
+		// schema init
+		Resource initSchema = new ClassPathResource("scripts/schema.sql");
+		DatabasePopulator databaseCreator = new ResourceDatabasePopulator(initSchema);
+		DatabasePopulatorUtils.execute(databaseCreator, dataSource);
+
+		// data init
+		Resource initData = new ClassPathResource("scripts/database_00.sql");
+		DatabasePopulator databasePopulator = new ResourceDatabasePopulator(initData);
+		DatabasePopulatorUtils.execute(databasePopulator, dataSource);
 
 		return dataSource;
 	}
