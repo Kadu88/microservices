@@ -21,14 +21,14 @@ public class MicroservicesApplication {
 		SpringApplication.run(MicroservicesApplication.class, args);
 	}
 
-	// mysql
+	// MYSQL - PRODUTO
 	@Bean
 	public DataSource dataSource() {
 		DriverManagerDataSource dataSource = new DriverManagerDataSource();
 		dataSource.setDriverClassName("com.mysql.jdbc.Driver");
-		dataSource.setUrl("jdbc:mysql://192.168.0.10:3306/pet_data_produto");
-		dataSource.setUsername("rootapp");
-		dataSource.setPassword("Vi0i57qr");
+		dataSource.setUrl(System.getProperty("DATASOURCE_URL_PRODUTO"));
+		dataSource.setUsername(System.getProperty("DATASOURCE_USERNAME_PRODUTO"));
+		dataSource.setPassword(System.getProperty("DATASOURCE_PASS_PRODUTO"));
 
 		// schema init
 		Resource initSchema = new ClassPathResource("scripts/schema.sql");
